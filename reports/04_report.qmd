@@ -1,0 +1,109 @@
+---
+title: "Chicago Pothole Complaints Analysis"
+subtitle: "Identifying High-Priority Community Areas"
+author: "Shaofeng Dai"
+date: "2025/12/11"
+format:
+  html:
+    toc: true
+    toc-float: true
+    theme: cosmo
+execute:
+  echo: false
+  warning: false
+---
+
+## Introduction
+
+This report visualizes the distribution of pothole service requests across Chicago community areas to help the Department of Transportation allocate repair resources more effectively.
+
+## Data Source & Filtering
+
+-   **Source**: Chicago Data Portal – 311 Service Requests\
+-   **Filter**: `type_of_service_request` contains "Pothole"\
+-   **Period**: Full available dataset (singel-year)\
+-   **Records**: `r nrow(df)` requests after cleaning
+
+## Data
+
+```{r}
+library(readr)
+library(dplyr)
+library(knitr)  
+library(kableExtra)
+
+processed <- read_csv("data/potholes.csv", show_col_types = FALSE)
+
+sample_tbl <- processed %>%
+  arrange(desc(creation_date)) %>%
+  slice_head(n = 20)
+
+sample_tbl %>%
+  kable(format = "html", caption = "First 20 Rows of Cleaned Data") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+## Visualizations
+
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+
+data <- read_csv("data/potholes.csv", show_col_types = FALSE) %>% 
+  mutate(month = floor_date(creation_date, "month"))
+```
+
+```{r}
+top20 <- count(data, community_area, sort = TRUE) %>% slice_head(n = 20)
+
+ggplot(top20, aes(reorder(community_area, n), n)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 20 Community Areas by Pothole Complaints",
+       x = NULL, y = "Number of Requests") +
+  theme_minimal(base_size = 14)
+```
+
+```{r}
+top10 <- count(data, community_area, sort = TRUE) %>% slice_head(n = 10)
+
+ggplot(top10, aes(x = "", y = n, fill = factor(community_area))) +
+  geom_col(width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  labs(title = "Top 10 Communities Share", fill = "Community Area") +
+  theme_void()
+```
+
+## Advanced Analysis
+
+```{r}
+library(readr)
+library(ggplot2)
+
+clusters <- read_csv("outputs/community_clusters.csv")
+
+ggplot(clusters, aes(pct_weekend, n_requests, colour = cluster)) +
+  geom_point(size = 3, alpha = .8) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_log10() +
+  labs(title = "Community Clusters (K-means, k=3)",
+       x = "Weekend Request %",
+       y = "Total Requests (log)",
+       colour = "Cluster") +
+  theme_minimal()
+```
+
+```{r}
+library(kableExtra)
+clusters %>%
+  group_by(cluster) %>%
+  summarise(
+    Communities = n(),
+    Avg_Requests = round(mean(n_requests), 0),
+    Avg_Weekend = round(mean(pct_weekend) * 100, 1)
+  ) %>%
+  kable(format = "html", caption = "Cluster Summary") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
