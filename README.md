@@ -5,9 +5,6 @@
 - `scripts/` – reproducible R scripts (01-05 except 04)
 - `reports/` – Quarto main report (04) + **parameterized template**
 
-## Automation Demo
-Run `source("scripts/render_reports.R")` to generate **one HTML per community** via parameterized Quarto.
-
 ## Usage
 1. Clone repo
 2. Open `pa446-final.Rproj` (or set working directory)
