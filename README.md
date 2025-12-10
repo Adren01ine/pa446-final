@@ -13,7 +13,7 @@ Run `source("scripts/render_reports.R")` to generate **one HTML per community** 
 1. Clone repo
 2. Open `pa446-final.Rproj` (or set working directory)
 3. Run `01_download.R` → `02_clean.R` → `03_analysis.R` → `05_cluster.R`
-4. Render `reports/report.qmd` for full report
+4. Render `reports/04_report.qmd` for full report
 5. Execute `render_reports.R` for community-level outputs
 
 ## Outputs
