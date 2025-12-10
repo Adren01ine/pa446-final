@@ -20,4 +20,4 @@ Run `source("scripts/render_reports.R")` to generate **one HTML per community** 
 - `report.html` – city-wide analysis (≥ 3 viz + clustering)
 - `community_X.html` – individual neighborhood dashboard
 
-GitHub Repository: https://github.com/YOUR_USER/pa446-pothole
+GitHub Repository: https://github.com/Adren01ine/pa446-final
