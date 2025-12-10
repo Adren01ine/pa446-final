@@ -2,9 +2,8 @@
 
 ## Repo Structure
 - `data/` – raw & cleaned data
-- `scripts/` – reproducible R scripts (01-05)
-- `reports/` – Quarto main report + **parameterized template**
-- `out_reports/` – auto-generated community reports (git-ignored)
+- `scripts/` – reproducible R scripts (01-05 except 04)
+- `reports/` – Quarto main report (04) + **parameterized template**
 
 ## Automation Demo
 Run `source("scripts/render_reports.R")` to generate **one HTML per community** via parameterized Quarto.
